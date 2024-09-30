@@ -27,7 +27,7 @@ date_granularity,
 spend,
 impressions, 
 link_clicks,
-add_to_cart,
+onsite_web_add_to_cart as add_to_cart,
 initiate_checkout,
 onsite_web_purchase as purchases,
 onsite_web_purchase_value as revenue
