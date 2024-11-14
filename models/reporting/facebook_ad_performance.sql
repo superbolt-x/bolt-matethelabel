@@ -11,6 +11,17 @@ CASE WHEN campaign_name ~* 'Prospecting' THEN 'Campaign Type: Prospecting'
     WHEN campaign_name ~* 'Lifecycle' THEN 'Campaign Type: Lifecycle'
     ELSE campaign_type_default
 END as campaign_type_default,
+case
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'move' then 'MOVE'
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'sweats' then 'Sweats'
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'winners' then 'Winners'
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'tees' then 'Tees'
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'dpa' then 'DPA'
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'mens' then 'Mens'
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'kids' then 'Kids'
+    when campaign_name ~* 'prospecting' and campaign_name ~* 'socks' then 'Socks'
+    else 'Other' 
+end as campaign_type_prospecting,
 adset_name,
 adset_id,
 adset_effective_status,
