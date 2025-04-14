@@ -11,6 +11,7 @@ campaign_status,
 campaign_type_default,
 case
     when campaign_name ~* 'move' then 'MOVE'
+    when campaign_name ~* 'SB_Performance Max_New Product Launch' then 'New Product Launch'
     when campaign_name ~* 'sweats' then 'Sweats'
     when campaign_name ~* 'bfcm' then 'BFCM'
     when campaign_name ~* 'tees' then 'Tees'
