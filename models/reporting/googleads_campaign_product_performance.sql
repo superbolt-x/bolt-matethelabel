@@ -1,5 +1,5 @@
 {{ config (
-    alias = target.database + '_googleads_campaign_performance'
+    alias = target.database + '_googleads_campaign_product_performance'
 )}}
 
 SELECT 
