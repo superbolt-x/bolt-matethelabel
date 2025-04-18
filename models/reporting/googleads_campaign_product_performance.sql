@@ -29,8 +29,5 @@ clicks,
 conversions as purchases,
 conversions_value as revenue,
 matethelabelga4webpurchase as ga4_purchases,
-matethelabelga4webpurchase_value as ga4_revenue,
-search_impression_share,
-search_budget_lost_impression_share,
-search_rank_lost_impression_share
+matethelabelga4webpurchase_value as ga4_revenue
 FROM {{ ref('googleads_performance_by_campaign_product') }}
