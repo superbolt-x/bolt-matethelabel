@@ -18,6 +18,7 @@ case
     when campaign_name ~* 'tCPA' then 'NC tCPA'
     when campaign_name ~* 'socks' then 'Socks'
     when campaign_name ~* 'branded' then 'Branded'
+    when campaign_name ~* 'feed only' then 'Feed Only'
     else 'Other' 
 end as campaign_type_custom,
 ad_group_name,
