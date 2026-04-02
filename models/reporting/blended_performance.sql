@@ -66,4 +66,4 @@ forecasted_data AS (
 SELECT * FROM sho_data
 UNION ALL
 SELECT * FROM forecasted_data
-ORDER BY date DESC;
+ORDER BY date DESC
