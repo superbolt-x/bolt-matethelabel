@@ -1,1 +1,49 @@
 version: 2
+
+sources:
+  - name: shopify
+    schema: reporting
+    tables:
+      - name: daily_sales
+        identifier: matethelabel_shopify_daily_sales_by_order
+        description: "Commandes Shopify journalières"
+        columns:
+          - name: date
+            description: "Date de la commande"
+          - name: order_id
+            description: "ID unique de commande"
+          - name: customer_order_index
+            description: "Index de commande client (1 = premier achat)"
+
+      - name: daily_refunds
+        identifier: matethelabel_shopify_daily_refunds
+        description: "Remboursements Shopify journaliers"
+
+  - name: ads
+    schema: reporting
+    tables:
+      - name: facebook_ads
+        identifier: matethelabel_facebook_ad_performance
+        description: "Performances Facebook Ads"
+
+      - name: google_ads
+        identifier: matethelabel_googleads_campaign_performance
+        description: "Performances Google Ads"
+
+  - name: gsheet
+    schema: gsheet_raw
+    tables:
+      - name: forecast
+        identifier: forecast_data
+        description: "Données de forecast (Google Sheets)"
+        columns:
+          - name: date
+            description: "Date du forecast"
+          - name: original_spend
+            description: "Budget prévu"
+          - name: acquisitions
+            description: "Nouveaux clients prévus"
+          - name: returning
+            description: "Clients récurrents"
+          - name: revenue
+            description: "Chiffre d'affaires prévu"
