@@ -8,12 +8,12 @@ WITH granularities AS (
 
 initial_sho_data AS (
     SELECT *
-    FROM {{ source('shopify', 'daily_sales') }}
+    FROM {{ source('reporting', 'shopify_daily_sales_by_order') }}
 
     UNION ALL
 
     SELECT *
-    FROM {{ source('shopify', 'daily_refunds') }}
+    FROM {{ source('reporting', 'shopify_daily_refunds') }}
 ),
 
 sho_data AS (
@@ -26,20 +26,26 @@ sho_data AS (
         COUNT(DISTINCT order_id) as shopify_orders,
         COUNT(DISTINCT CASE WHEN customer_order_index = 1 THEN order_id END) as shopify_first_orders,
 
-        SUM(COALESCE(gross_revenue,0)
+        SUM(
+            COALESCE(gross_revenue,0)
             - COALESCE(subtotal_discount,0)
             + COALESCE(total_tax,0)
             + COALESCE(shipping_price,0)
-            - COALESCE(shipping_discount,0)) as shopify_sales
+            - COALESCE(shipping_discount,0)
+        ) as shopify_sales
 
     FROM initial_sho_data, granularities g
     GROUP BY 1,2,3
 ),
 
 ads_data AS (
-    SELECT * FROM {{ source('ads', 'facebook_ads') }}
+    SELECT * 
+    FROM {{ source('reporting', 'facebook_ad_performance') }}
+
     UNION ALL
-    SELECT * FROM {{ source('ads', 'google_ads') }}
+
+    SELECT * 
+    FROM {{ source('reporting', 'googleads_campaign_performance') }}
 ),
 
 forecasted_data AS (
@@ -53,17 +59,11 @@ forecasted_data AS (
         SUM(returning) as returning_orders,
         SUM(revenue) as total_sales
 
-    FROM {{ source('gsheet', 'forecast') }}, granularities g
+    FROM {{ source('gsheet_raw', 'forecast_data') }}, granularities g
     GROUP BY 1,2,3
 )
 
 SELECT * FROM sho_data
 UNION ALL
 SELECT * FROM forecasted_data
-
-SELECT * FROM sho_data
-UNION ALL
-SELECT * FROM forecasted_data
-UNION ALL
-SELECT * FROM adjusted_forecasted_data
 ORDER BY date DESC;
