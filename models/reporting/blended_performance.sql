@@ -1,3 +1,7 @@
+{{ config (
+    alias = target.database + '_blended_performance'
+)}}
+
 WITH initial_sho_data AS
     (SELECT date, day, week, month, quarter, year, 
         order_id, customer_order_index, gross_revenue, total_revenue, subtotal_discount, shipping_price, total_tax, shipping_discount, 0 as subtotal_refund, 0 as shipping_refund, 0 as tax_refund
