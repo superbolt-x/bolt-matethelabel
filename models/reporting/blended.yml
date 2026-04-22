@@ -23,6 +23,9 @@ sources:
       - name: shopify_daily_refunds
         identifier: matethelabel_shopify_daily_refunds
 
+      - name: shopify_sales
+      identifier: matethelabel_shopify_sales
+
   - name: gsheet_raw
     schema: gsheet_raw
     tables:
