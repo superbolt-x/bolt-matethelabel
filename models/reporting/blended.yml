@@ -17,12 +17,6 @@ sources:
       - name: googleads_campaign_performance
         identifier: matethelabel_googleads_campaign_performance
 
-      - name: shopify_daily_sales_by_order
-        identifier: matethelabel_shopify_daily_sales_by_order
-
-      - name: shopify_daily_refunds
-        identifier: matethelabel_shopify_daily_refunds
-
       - name: shopify_sales
       identifier: matethelabel_shopify_sales
 
