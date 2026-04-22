@@ -2,35 +2,30 @@
     alias = target.database + '_blended_performance'
 )}}
 
-WITH initial_sho_data AS
-    (SELECT date, day, week, month, quarter, year, 
-        order_id, customer_order_index, gross_revenue, total_revenue, subtotal_discount, shipping_price, total_tax, shipping_discount, 0 as subtotal_refund, 0 as shipping_refund, 0 as tax_refund
-    FROM {{ source('reporting', 'shopify_daily_sales_by_order') }}
-    UNION ALL
-    SELECT date, day, week, month, quarter, year, 
-        null as order_id, customer_order_index, 0 as gross_revenue, 0 as total_revenue, 0 as subtotal_discount, 0 as shipping_price, 0 as total_tax, 0 as shipping_discount, subtotal_refund, shipping_refund, tax_refund 
-    FROM {{ source('reporting', 'shopify_daily_refunds') }})
+WITH 
+sho_data AS (
+	SELECT 
+	date_granularity,
+    date,
+	'Actual' as data_type,
+	sum(0) as spend,
 
-{%- set date_granularity_list = ['day','week','month','quarter','year'] -%}
-    
-, sho_data AS (
-        {%- for date_granularity in date_granularity_list %}
-            SELECT 
-    			date_trunc('{{date_granularity}}',date) as date,
-                '{{date_granularity}}' as date_granularity,
-    			'Actual' as data_type,
-    			sum(0) as spend,
-                COUNT(DISTINCT order_id) as shopify_orders, 
-                COUNT(DISTINCT CASE WHEN customer_order_index = 1 THEN order_id END) as shopify_first_orders,
-                SUM(COALESCE(gross_revenue,0)-COALESCE(subtotal_discount,0)+COALESCE(total_tax,0)+COALESCE(shipping_price,0)-COALESCE(shipping_discount,0)) as shopify_sales,
-                SUM(CASE WHEN customer_order_index = 1 THEN COALESCE(gross_revenue,0)-COALESCE(subtotal_discount,0)+COALESCE(total_tax,0)+COALESCE(shipping_price,0)-COALESCE(shipping_discount,0) END) as shopify_first_sales,
-                SUM(COALESCE(subtotal_refund,0)-COALESCE(shipping_refund,0)+COALESCE(tax_refund,0)) as shopify_refund,
-                SUM(CASE WHEN customer_order_index = 1 THEN COALESCE(subtotal_refund,0)-COALESCE(shipping_refund,0)+COALESCE(tax_refund,0) END) as shopify_first_refund
-            FROM initial_sho_data
-            GROUP BY 1,2,3
-            {%- if not loop.last %}UNION ALL{%- endif %}
-        {% endfor %}
-		)
+	first_orders as shopify_first_orders, 
+        orders as shopify_orders, 
+        first_order_total_net_sales as shopify_first_sales, 
+        total_net_sales as shopify_sales,
+        first_order_net_sales as shopify_first_net_sales,
+        net_sales as shopify_net_sales
+	
+	orders as shopify_orders, 
+	first_orders as shopify_first_orders,
+	total_net_sales as shopify_sales,
+	first_order_total_net_sales as shopify_first_sales,
+	subtotal_refund - shipping_refunds + tax_refunds as shopify_refund,
+	first_order_subtotal_refund - first_order_shipping_refunds + first_order_tax_refunds as shopify_refund as shopify_first_refund
+    FROM {{ source('reporting','shopify_sales') }}
+	GROUP BY 1,2,3
+           
 
 , actual_data as (select 
     date,
