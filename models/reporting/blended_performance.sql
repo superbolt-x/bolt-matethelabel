@@ -8,23 +8,14 @@ sho_data AS (
 	date_granularity,
     date,
 	'Actual' as data_type,
-	sum(0) as spend,
-
-	first_orders as shopify_first_orders, 
-        orders as shopify_orders, 
-        first_order_total_net_sales as shopify_first_sales, 
-        total_net_sales as shopify_sales,
-        first_order_net_sales as shopify_first_net_sales,
-        net_sales as shopify_net_sales
-	
+	0 as spend,
 	orders as shopify_orders, 
 	first_orders as shopify_first_orders,
 	total_net_sales as shopify_sales,
 	first_order_total_net_sales as shopify_first_sales,
 	subtotal_refund - shipping_refunds + tax_refunds as shopify_refund,
-	first_order_subtotal_refund - first_order_shipping_refunds + first_order_tax_refunds as shopify_refund as shopify_first_refund
+	first_order_subtotal_refund - first_order_shipping_refunds + first_order_tax_refunds as shopify_first_refund
     FROM {{ source('reporting','shopify_sales') }}
-	GROUP BY 1,2,3
            
 
 , actual_data as (select 
