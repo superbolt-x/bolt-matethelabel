@@ -16,9 +16,11 @@ sho_data AS (
 	subtotal_refund - shipping_refunds + tax_refunds as shopify_refund,
 	first_order_subtotal_refund - first_order_shipping_refunds + first_order_tax_refunds as shopify_first_refund
     FROM {{ source('reporting','shopify_sales') }}
+	)
            
 
-, actual_data as (select 
+, actual_data as (
+	select 
     date,
     date_granularity,
     data_type,
