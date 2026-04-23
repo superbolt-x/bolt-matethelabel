@@ -18,7 +18,7 @@ sources:
         identifier: matethelabel_googleads_campaign_performance
 
       - name: shopify_sales
-      identifier: matethelabel_shopify_sales
+        identifier: matethelabel_shopify_sales
 
   - name: gsheet_raw
     schema: gsheet_raw
