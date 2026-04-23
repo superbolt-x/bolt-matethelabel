@@ -15,7 +15,7 @@ sho_data AS (
 	first_orders as shopify_first_orders,
 	total_net_sales as shopify_sales,
 	first_order_total_net_sales as shopify_first_sales,
-	subtotal_refund - shipping_refunds + tax_refunds as shopify_refund,
+	subtotal_refunds - shipping_refunds + tax_refunds as shopify_refund,
 	first_order_subtotal_refund - first_order_shipping_refunds + first_order_tax_refunds as shopify_first_refund
     FROM {{ source('reporting','shopify_sales') }}
 	)
