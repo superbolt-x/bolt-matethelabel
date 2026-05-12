@@ -13,10 +13,8 @@ sho_data AS (
 	0 as spend,
 	orders as shopify_orders, 
 	first_orders as shopify_first_orders,
-	total_net_sales as shopify_sales,
-	first_order_total_net_sales as shopify_first_sales,
-	subtotal_refunds - shipping_refunds + tax_refunds as shopify_refund,
-	first_order_subtotal_refunds - first_order_shipping_refunds + first_order_tax_refunds as shopify_first_refund
+	net_sales as shopify_sales,
+	first_order_net_sales as shopify_first_sales
     FROM {{ source('reporting','shopify_sales') }}
 	)
            
@@ -44,8 +42,8 @@ group by 1,2,3
 union all 
 select date, date_granularity, data_type, spend, shopify_first_orders as first_orders, 
     coalesce(shopify_orders,0) - coalesce(shopify_first_orders,0) as returning_orders, 
-    coalesce(shopify_sales,0) - coalesce(shopify_refund,0)  as subtotal_sales,
-	coalesce(shopify_first_sales,0) - coalesce(shopify_first_refund,0)  as first_subtotal_sales
+    coalesce(shopify_sales,0)  as subtotal_sales,
+	coalesce(shopify_first_sales,0) as first_subtotal_sales
 from sho_data)
 group by 1,2,3)
 
